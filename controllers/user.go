@@ -60,6 +60,34 @@ func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, _ ht
 	fmt.Fprintf(w, "%s\n", uj)
 }
 
+func (uc UserController) UpdateUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+
+	id := p.ByName("id")
+
+	if !bson.IsObjectIdHex(id) {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	oid := bson.ObjectIdHex(id)
+
+	updatedUser := models.User{}
+	if err := json.NewDecoder(r.Body).Decode(&updatedUser); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "Invalid request body: %v", err)
+		return
+	}
+
+	if err := uc.session.DB("DB_USER").C("users").UpdateId(oid, updatedUser); err != nil {
+		w.WriteHeader(http.StatusInternalServerError) // Internal Server Error
+		fmt.Fprintf(w, "Failed to update user: %v", err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, "User updated successfully\n")
+}
+
 func (uc UserController) DeleteUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 
 	id := p.ByName("id")

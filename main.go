@@ -15,13 +15,13 @@ func main() {
 	r.POST("/user", uc.CreateUser)
 	//r.PUT()
 	r.DELETE("/user/:id", uc.DeleteUser)
-	http.ListenAndServe("localhost:8000", r)
+	http.ListenAndServe("DB_HOST:DB_PORT", r)
 
 }
 
 func getSession() *mgo.Session {
 	//s, err := mgo.Dail("mongodb://localhost:27107")
-	s, err := mgo.Dial("mongodb+srv://ezrahel:Taepryung@cluster0.ncdi5ro.mongodb.net/?retryWrites=true&w=majority")
+	s, err := mgo.Dial("mongodb+srv://DB_NAME:DB_PASSWORD@cluster0.ncdi5ro.mongodb.net/?retryWrites=true&w=majority")
 	if err != nil {
 		panic(err)
 	}
