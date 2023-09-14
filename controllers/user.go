@@ -30,7 +30,7 @@ func (uc UserController) GetUser(w http.ResponseWriter, r *http.Request, p httpr
 
 	u := models.User{}
 
-	if err := uc.session.DB("mongo-golang").C("users").FindId(oid).One(&u); err != nil {
+	if err := uc.session.DB("DB_USER").C("users").FindId(oid).One(&u); err != nil {
 		w.WriteHeader(404)
 		return
 	}
@@ -50,7 +50,7 @@ func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, _ ht
 	u := models.User{}
 	json.NewDecoder(r.Body).Decode(&u)
 	u.Id = bson.NewObjectId()
-	uc.session.DB("mongo-golang").C("users").Insert(u)
+	uc.session.DB("DB_USER").C("users").Insert(u)
 	uj, err := json.Marshal(u)
 	if err != nil {
 		fmt.Println(err)
@@ -99,7 +99,7 @@ func (uc UserController) DeleteUser(w http.ResponseWriter, r *http.Request, p ht
 
 	oid := bson.ObjectIdHex(id)
 
-	if err := uc.session.DB("mongo-golang").C("users").RemoveId(oid); err != nil {
+	if err := uc.session.DB("DB_USER").C("users").RemoveId(oid); err != nil {
 		w.WriteHeader(404)
 	}
 

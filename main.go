@@ -11,10 +11,10 @@ import (
 func main() {
 	r := httprouter.New()
 	uc := controllers.NewUserController(getSession())
-	r.GET("/user/:id", uc.GetUser)
-	r.POST("/user", uc.CreateUser)
-	//r.PUT()
-	r.DELETE("/user/:id", uc.DeleteUser)
+	r.GET("/api/:id", uc.GetUser)
+	r.POST("/api", uc.CreateUser)
+	r.PUT("/api/:id", uc.UpdateUser)
+	r.DELETE("/api/:id", uc.DeleteUser)
 	http.ListenAndServe("DB_HOST:DB_PORT", r)
 
 }
