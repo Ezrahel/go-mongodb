@@ -1,6 +1,6 @@
 module github.com/ezrahel/mongodb-go
 
-go 1.21.0
+go 1.23
 
 require (
 	github.com/julienschmidt/httprouter v1.3.0 // indirect
